@@ -5,10 +5,12 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "dev": "webpack serve --config webpack.config.dev.js --open --hot",
-    "build": "webpack --config webpack.config.prod.js",
-    "devbuild": "webpack --config webpack.config.dev.js",
-    "deploy": "concurrently \"webpack --config webpack.config.prod.js\" \"node ./server/app.ts\""
+    "format": "npx prettier --write *",
+    "dev": "cross-env NODE_ENV=development webpack serve --config webpack.config.dev.cjs --open --hot",
+    "build": "cross-env NODE_ENV=production webpack --config webpack.config.prod.cjs",
+    "devbuild": "cross-env NODE_ENV=development webpack --config webpack.config.dev.cjs",
+    "server": "\"ts-node-esm\" server/app.ts",
+    "deploy": "concurrently  \"cross-env NODE_ENV=development webpack --watch --config webpack.config.prod.js\" \"nodemon --exec 'ts-node-esm' ./server/app.ts\""
   },
   "devDependencies": {
     "@babel/core": "^7.19.1",
@@ -41,7 +43,10 @@
     "webpack-dev-server": "^4.11.1"
   },
   "dependencies": {
+    "concurrently": "^7.4.0",
+    "dotenv": "^16.0.3",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "tsconfig-paths-webpack-plugin": "^4.0.0"
   }
 }
